@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Real News</title>
+</head>
+<body>
+	
+	<h1>RealNews</h1>
+	<hr>
+	
+	<div style="margin: 15px;">
+	
+		<h1 id="TituloNoticia"></h1>
+		<h3 id="DescricaoNoticia"></h3>
+		<p style="min-height: 100px;" id="TextoNoticia"></p> 
+		
+		
+		<h2>Comentários:</h2>
+		<hr>
+		<div id="comentariosList"></div>
+		
+		<h3>Adicionar Comentário:</h3>
+		<form action="Comentario.do" method="post">
+		<input type="hidden" name="noticiaId" id="noticiaId">
+		
+		<table>
+			<tr><td>Nome: </td><td><input type="text" name="nome" /></td></tr>
+			<tr><td>Comentário: </td><td><textarea name="texto" rows="3" cols="50"></textarea></td></tr>
+			<tr><td><a href="index.html"><input type="button" value="Voltar" /></a></td><td><input type="submit" value="Enviar" /><br/></td></tr>	
+		</table>
+	</form>
+	
+	</div>
+</body>
+<script>
+function httpGet(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get('id');
+
+var noticia = JSON.parse(httpGet("http://localhost:8080/RealNews/Noticia?id="+id));
+
+document.getElementById("noticiaId").value = noticia.id;
+document.getElementById("TituloNoticia").innerHTML = noticia.titulo;
+document.getElementById("DescricaoNoticia").innerHTML = noticia.descricao;
+document.getElementById("TextoNoticia").innerHTML = noticia.texto;
+	
+var comentarios = JSON.parse(httpGet("http://localhost:8080/RealNews/Comentarios?noticiaId="+id));
+
+comentarios.forEach((c) => document.getElementById('comentariosList').innerHTML += "<h3>"+c.nome+"</h3><p>"+c.texto+"</p><hr>");
+
+</script>
+</html>

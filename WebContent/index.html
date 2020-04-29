@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RealNews</title>
+</head>
+<body>
+	<h1>RealNews</h1>
+	<hr>
+	
+	<div style="margin: 15px;">
+	
+		<div id="noticiasList"></div>
+	
+	
+		<a href="CriarNoticia.html"><input type="button" value="Cadastrar Noticia"></input></a>
+	</div>
+</body>
+<script>
+function httpGet(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+	
+JSON.parse(httpGet("http://localhost:8080/RealNews/Noticias"))
+	.forEach((c) => 
+		document.getElementById('noticiasList').innerHTML += 
+				"<h2><a href='Noticia.html?id="+c.id+"'>"+c.titulo+"</a></h2><p>"+c.descricao+"</p><br>" +
+				"<a href='EditarNoticia.html?id="+c.id+"'><input type='button' value='Editar Noticia'></input></a>" +
+				"<a href='ExcluirNoticia.do?id="+c.id+"'><input type='button' value='Excluir Noticia'></input></a>" +
+				"<hr>");
+</script>
+</html>
